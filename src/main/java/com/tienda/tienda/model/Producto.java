@@ -22,6 +22,6 @@ public class Producto {
     @Column(nullable = false, length = 10)
     private Long precioProducto;
 
-    @Column(nullable = false, length = 3)
+    @Column()
     private Long stockRestante;
 }

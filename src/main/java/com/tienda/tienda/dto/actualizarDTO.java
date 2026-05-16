@@ -17,5 +17,5 @@ public class actualizarDTO {
     @NotNull(message = "El producto debe tener un precio")
     private Long precioproducto;
 
-    private Long stockRestante;
+    private Long stockrestante;
 }
