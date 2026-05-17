@@ -1,10 +1,10 @@
 package com.tienda.tienda.service;
 
-import com.tienda.tienda.dto.ProductoRequestDTO;
-import com.tienda.tienda.dto.ProductoResponseDTO;
-import com.tienda.tienda.dto.actualizarDTO;
+import com.tienda.tienda.dto.*;
 import com.tienda.tienda.model.Producto;
+import com.tienda.tienda.model.Venta;
 import com.tienda.tienda.repository.ProductoRepository;
+import com.tienda.tienda.repository.VentaRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ import java.util.Optional;
 public class ProductoService {
     @Autowired
     private final ProductoRepository productoRepository;
+    private final VentaRepository ventaRepository;
 
     private ProductoResponseDTO mapToDto(Producto producto) {
         return new ProductoResponseDTO(
@@ -87,8 +88,6 @@ public class ProductoService {
                existe.setStockRestante(dto.getStockrestante());
            }
 
-
-
            return mapToDto(productoRepository.save(existe));
         });
     }
@@ -112,5 +111,28 @@ public class ProductoService {
         respuesta.setPrecioProducto(Productoguardado.getPrecioProducto());
         respuesta.setStockRestante(Productoguardado.getStockRestante());
         return respuesta;
+    }
+
+    public VentaResponseDTO registrarVenta(VentaRequestDTO dto){
+        if(!productoRepository.existsByNombreProducto(dto.getNombreproducto())){
+            throw new RuntimeException("ERROR: Ya existe un producto con el nombre '"+dto.getNombreproducto()+"'");
+        }
+
+        Venta ventanueva = new Venta();
+        ventanueva.setNombreProducto(dto.getNombreproducto());
+        ventanueva.setPrecioProducto(dto.getPrecioproducto());
+
+        Venta ventaguardada = ventaRepository.save(ventanueva);
+
+        VentaResponseDTO respuesta = new VentaResponseDTO();
+        respuesta.setIdventa(ventanueva.getIdVenta());
+        respuesta.setNombreProducto(ventanueva.getNombreProducto());
+        respuesta.setPrecioProducto(ventanueva.getPrecioProducto());
+
+        return respuesta;
+    }
+
+    public List<Venta> obtenerVentas() {
+        return ventaRepository.findAll();
     }
 }

@@ -1,9 +1,8 @@
 package com.tienda.tienda.controller;
 
-import com.tienda.tienda.dto.ProductoRequestDTO;
-import com.tienda.tienda.dto.ProductoResponseDTO;
-import com.tienda.tienda.dto.actualizarDTO;
+import com.tienda.tienda.dto.*;
 import com.tienda.tienda.model.Producto;
+import com.tienda.tienda.model.Venta;
 import com.tienda.tienda.repository.ProductoRepository;
 import com.tienda.tienda.service.ProductoService;
 import jakarta.validation.Valid;
@@ -86,5 +85,16 @@ public class ProductoController {
     public ResponseEntity<ProductoResponseDTO> registrarUsuario(@Valid @RequestBody ProductoRequestDTO dto){
         ProductoResponseDTO nuevo = productoService.agregarProducto(dto);
         return ResponseEntity.status(201).body(nuevo);
+    }
+
+    @GetMapping("/listarpagos")
+    public ResponseEntity<List<Venta>> obtenerVentas(){
+        return ResponseEntity.ok(productoService.obtenerVentas());
+    }
+
+    @PostMapping("/guardarpago")
+    public ResponseEntity<VentaResponseDTO> registrarVenta(@Valid @RequestBody VentaRequestDTO dto){
+        VentaResponseDTO nueva = productoService.registrarVenta(dto);
+        return ResponseEntity.status(201).body(nueva);
     }
 }
