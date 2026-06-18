@@ -2,9 +2,11 @@ package com.tienda.tienda.controller;
 
 import com.tienda.tienda.dto.*;
 import com.tienda.tienda.model.Producto;
-import com.tienda.tienda.model.Venta;
 import com.tienda.tienda.repository.ProductoRepository;
 import com.tienda.tienda.service.ProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,12 +26,22 @@ public class ProductoController {
 
     // Listar todos los productos en la tienda
     @GetMapping("/listarproductos")
+    @Operation(summary = "Listar productos", description = "Obtiene una lista de todos los productos en catalogo.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Productos listados correctamente")
+    })
     public ResponseEntity<List<Producto>> obtenerProductos(){
         return ResponseEntity.ok(productoService.obtenerProductos());
     }
 
     // Buscar producto por id
     @GetMapping("/busqueda/id/{idProducto}")
+    @Operation(summary = "Buscar un producto", description = "Utilizado para buscar un producto por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Producto encontrado"),
+            @ApiResponse(responseCode = "404", description = "Error al buscar el producto"),
+            @ApiResponse(responseCode = "500", description = "Error del servidor")
+    })
     public ResponseEntity<?> obtenerPorId(@PathVariable Long idProducto) {
         ProductoResponseDTO dto = productoService.obtenerporId(idProducto);
         return ResponseEntity.ok(dto);
@@ -37,6 +49,12 @@ public class ProductoController {
 
     // Buscar producto por nombre
     @GetMapping("/busqueda/nombre/{nombreProducto}")
+    @Operation(summary = "Buscar un producto", description = "Utilizado para buscar un producto por su NOMBRE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Producto encontrado"),
+            @ApiResponse(responseCode = "404", description = "Error al buscar el producto"),
+            @ApiResponse(responseCode = "500", description = "Error del servidor")
+    })
     public ResponseEntity<ProductoResponseDTO> buscarPorNombre(@PathVariable String nombreProducto){
         ProductoRequestDTO dto = new ProductoRequestDTO();
          dto.setNombreproducto(nombreProducto);
@@ -47,6 +65,12 @@ public class ProductoController {
 
     // Borrar producto
     @DeleteMapping("/borrar/{idProducto}")
+    @Operation(summary = "Eliminar un producto", description = "Utilizado para eliminar un producto por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Producto eliminado correctamente"),
+            @ApiResponse(responseCode = "404", description = "Error al eliminar el producto"),
+            @ApiResponse(responseCode = "500", description = "Error del servidor")
+    })
     public ResponseEntity<?> borrarUsuario(@PathVariable Long idProducto){
         if(productoService.buscarId(idProducto).isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -64,6 +88,12 @@ public class ProductoController {
 
     // Actualizar producto
     @PutMapping("/actualizar/{idProducto}")
+    @Operation(summary = "Actualizar un producto", description = "Utilizado para actualizar un producto por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Producto modificado correctamente"),
+            @ApiResponse(responseCode = "404", description = "Error al modificar el producto"),
+            @ApiResponse(responseCode = "500", description = "Error del servidor")
+    })
     public ResponseEntity<?> actualizarProducto(@PathVariable Long idProducto, @Valid @RequestBody actualizarDTO dto){
         if(productoService.buscarId(idProducto).isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -82,19 +112,14 @@ public class ProductoController {
     }
 
     @PostMapping("/anadirproducto")
+    @Operation(summary = "Añadir un producto", description = "Utilizado para añadir un producto al catalogo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Producto añadido exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Error al añadir el producto"),
+            @ApiResponse(responseCode = "500", description = "Error del servidor")
+    })
     public ResponseEntity<ProductoResponseDTO> registrarUsuario(@Valid @RequestBody ProductoRequestDTO dto){
         ProductoResponseDTO nuevo = productoService.agregarProducto(dto);
         return ResponseEntity.status(201).body(nuevo);
-    }
-
-    @GetMapping("/listarpagos")
-    public ResponseEntity<List<Venta>> obtenerVentas(){
-        return ResponseEntity.ok(productoService.obtenerVentas());
-    }
-
-    @PostMapping("/guardarpago")
-    public ResponseEntity<VentaResponseDTO> registrarVenta(@Valid @RequestBody VentaRequestDTO dto){
-        VentaResponseDTO nueva = productoService.registrarVenta(dto);
-        return ResponseEntity.status(201).body(nueva);
     }
 }
