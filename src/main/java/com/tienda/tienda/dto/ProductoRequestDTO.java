@@ -13,7 +13,9 @@ public class ProductoRequestDTO {
     private String nombreproducto;
 
     @NotNull(message = "El producto debe tener un precio")
+    @Positive
     private Long precioproducto;
 
+    @Positive
     private Long stockrestante;
 }

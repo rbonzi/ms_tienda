@@ -96,9 +96,16 @@ public class ProductoService {
             throw new RuntimeException("ERROR: Ya existe un producto con el nombre '" + dto.getNombreproducto()+"'");
         }
 
+
         Producto productoNuevo = new Producto();
         productoNuevo.setNombreProducto(dto.getNombreproducto());
         productoNuevo.setPrecioProducto(dto.getPrecioproducto());
+
+        if(productoNuevo.getStockRestante() != null){
+            if(productoNuevo.getStockRestante() < 0) {
+                throw new RuntimeException("El stock no puede ser un numero negativo");
+            }
+        }
         productoNuevo.setStockRestante(dto.getStockrestante());
 
         Producto Productoguardado = productoRepository.save(productoNuevo);

@@ -28,7 +28,8 @@ public class ProductoController {
     @GetMapping("/listarproductos")
     @Operation(summary = "Listar productos", description = "Obtiene una lista de todos los productos en catalogo.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Productos listados correctamente")
+            @ApiResponse(responseCode = "200", description = "Productos listados correctamente"),
+            @ApiResponse(responseCode = "500", description = "Error del servidor")
     })
     public ResponseEntity<List<Producto>> obtenerProductos(){
         return ResponseEntity.ok(productoService.obtenerProductos());
@@ -39,6 +40,7 @@ public class ProductoController {
     @Operation(summary = "Buscar un producto", description = "Utilizado para buscar un producto por su ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Producto encontrado"),
+            @ApiResponse(responseCode = "400", description = "Datos incorrectos"),
             @ApiResponse(responseCode = "404", description = "Error al buscar el producto"),
             @ApiResponse(responseCode = "500", description = "Error del servidor")
     })
@@ -52,6 +54,7 @@ public class ProductoController {
     @Operation(summary = "Buscar un producto", description = "Utilizado para buscar un producto por su NOMBRE")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Producto encontrado"),
+            @ApiResponse(responseCode = "400", description = "Datos incorrectos"),
             @ApiResponse(responseCode = "404", description = "Error al buscar el producto"),
             @ApiResponse(responseCode = "500", description = "Error del servidor")
     })
@@ -68,6 +71,7 @@ public class ProductoController {
     @Operation(summary = "Eliminar un producto", description = "Utilizado para eliminar un producto por su ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Producto eliminado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos incorrectos"),
             @ApiResponse(responseCode = "404", description = "Error al eliminar el producto"),
             @ApiResponse(responseCode = "500", description = "Error del servidor")
     })
@@ -91,6 +95,7 @@ public class ProductoController {
     @Operation(summary = "Actualizar un producto", description = "Utilizado para actualizar un producto por su ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Producto modificado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos incorrectos"),
             @ApiResponse(responseCode = "404", description = "Error al modificar el producto"),
             @ApiResponse(responseCode = "500", description = "Error del servidor")
     })
@@ -114,7 +119,8 @@ public class ProductoController {
     @PostMapping("/anadirproducto")
     @Operation(summary = "Añadir un producto", description = "Utilizado para añadir un producto al catalogo")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Producto añadido exitosamente"),
+            @ApiResponse(responseCode = "201", description = "Producto añadida correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos incorrectos"),
             @ApiResponse(responseCode = "404", description = "Error al añadir el producto"),
             @ApiResponse(responseCode = "500", description = "Error del servidor")
     })
